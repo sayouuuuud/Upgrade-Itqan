@@ -1,0 +1,410 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #FFFFFF;
+  --foreground: #1a1a1a;
+  --card: #FFFFFF;
+  --card-foreground: #1a1a1a;
+  --popover: #FFFFFF;
+  --popover-foreground: #1a1a1a;
+  --primary: #1B5E3B;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F0F5F2;
+  --secondary-foreground: #1B5E3B;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --accent: #1B5E3B;
+  --accent-foreground: #FFFFFF;
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --success: #16A34A;
+  --success-foreground: #FFFFFF;
+  --warning: #F59E0B;
+  --warning-foreground: #1a1a1a;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #0B3D2E;
+  --chart-1: #0B3D2E;
+  --chart-2: #D4A843;
+  --chart-3: #16A34A;
+  --chart-4: #3B82F6;
+  --chart-5: #F59E0B;
+  --radius: 0.75rem;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #1a1a1a;
+  --sidebar-primary: #0B3D2E;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F0F5F2;
+  --sidebar-accent-foreground: #0B3D2E;
+  --sidebar-border: #e5e5e5;
+  --sidebar-ring: #0B3D2E;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: #171717;
+  --card-foreground: #fafafa;
+  --popover: #171717;
+  --popover-foreground: #fafafa;
+  --primary: #D4A328;
+  --primary-foreground: #0B0F0E;
+  --secondary: #121F19;
+  --secondary-foreground: #D4A328;
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+  --accent: #D4A328;
+  --accent-foreground: #0B0F0E;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --success: #22C55E;
+  --success-foreground: #FFFFFF;
+  --warning: #FBBF24;
+  --warning-foreground: #1a1a1a;
+  --border: #262626;
+  --input: #262626;
+  --ring: #D4A328;
+  --chart-1: #D4A328;
+  --chart-2: #CBB17A;
+  --chart-3: #22C55E;
+  --chart-4: #60A5FA;
+  --chart-5: #FBBF24;
+  --sidebar: #171717;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #D4A328;
+  --sidebar-primary-foreground: #040706;
+  --sidebar-accent: #121F19;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #262626;
+  --sidebar-ring: #D4A328;
+}
+
+@theme inline {
+  --font-sans: var(--font-cairo), sans-serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-quran: var(--font-amiri), 'Amiri', serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-teal-50: #F0FDFA;
+  --color-teal-100: #CCFBF1;
+  --color-teal-200: #99F6E4;
+  --color-teal-500: #14B8A6;
+  --color-teal-600: #0D9488;
+  --color-teal-700: #0F766E;
+  --color-teal-800: #115E59;
+  --color-teal-900: #134E4A;
+}
+
+@layer base {
+  * {
+    @apply border-border/40 outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    overflow-y: overlay;
+  }
+}
+
+/* Waveform animation for audio players */
+@keyframes waveform {
+
+  0%,
+  100% {
+    height: 20%;
+  }
+
+  50% {
+    height: 80%;
+  }
+}
+
+@keyframes blob-float {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-blob-float {
+  animation: blob-float 7s ease-in-out infinite;
+}
+
+.animate-blob-float-delayed {
+  animation: blob-float 7s ease-in-out infinite 2s;
+}
+
+.animate-blob-float-delayed-2 {
+  animation: blob-float 7s ease-in-out infinite 4s;
+}
+
+.animate-fade-up {
+  animation: fade-up 0.6s ease-out forwards;
+}
+
+.waveform-bar {
+  animation: waveform 1.2s ease-in-out infinite;
+}
+
+/* Custom scrollbar - overlay mode (no layout space taken) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* === Islamic Royale Theme (For Admin, Student, Reader Dashboards) === */
+.theme-islamic {
+  --background: #FFFFFF;
+  --foreground: #081208;
+  --card: #FFFFFF;
+  --card-foreground: #081208;
+  --popover: #FFFFFF;
+  --popover-foreground: #081208;
+  --primary: #1B5E3B;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F0F5F2;
+  --secondary-foreground: #1B5E3B;
+  --muted: #f8fafc;
+  --muted-foreground: #64748b;
+  --accent: #1B5E3B;
+  --accent-foreground: #FFFFFF;
+  --destructive: #B03020;
+  --destructive-foreground: #FFFFFF;
+  --success: #1E8449;
+  --success-foreground: #FFFFFF;
+  --warning: #CD7F32;
+  --warning-foreground: #081208;
+  --border: #CBB17A;
+  --input: #E2E8F0;
+  --ring: #1B5E3B;
+
+  --sidebar: #0B2418;
+  --sidebar-foreground: #FDF5E1;
+  --sidebar-primary: #CBB17A;
+  --sidebar-primary-foreground: #0B2418;
+  --sidebar-accent: #1B5E3B;
+  --sidebar-accent-foreground: #FDF5E1;
+  --sidebar-border: #1B5E3B;
+  --sidebar-ring: #CBB17A;
+
+  background-color: var(--background) !important;
+  background-image: none !important;
+  min-height: 100vh;
+}
+
+.dark .theme-islamic,
+.theme-islamic.dark,
+.theme-islamic .dark {
+  --background: #060908;
+  --foreground: #fafafa;
+  --card: #0D1614;
+  --card-foreground: #fafafa;
+  --popover: #171717;
+  --popover-foreground: #fafafa;
+  --primary: #D4A328;
+  --primary-foreground: #0B0F0E;
+  --secondary: #121F19;
+  --secondary-foreground: #D4A328;
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+  --accent: #D4A328;
+  --accent-foreground: #0B0F0E;
+  --destructive: #EF4444;
+  --destructive-foreground: #F1F5F9;
+  --success: #22C55E;
+  --success-foreground: #0B0F0E;
+  --warning: #F59E0B;
+  --warning-foreground: #0B0F0E;
+  --border: #1E2D25;
+  --input: #1E2D25;
+  --ring: #D4A328;
+
+  --sidebar: #040706;
+  --sidebar-foreground: #E2E8F0;
+  --sidebar-primary: #D4A328;
+  --sidebar-primary-foreground: #040706;
+  --sidebar-accent: #121F19;
+  --sidebar-accent-foreground: #F1F5F9;
+  --sidebar-border: #121F19;
+  --sidebar-ring: #D4A328;
+}
+
+.dark .theme-islamic h1,
+.dark .theme-islamic h2,
+.dark .theme-islamic h3,
+.dark .theme-islamic h4,
+.dark .theme-islamic p,
+.dark .theme-islamic span:not([class*="text-"]),
+.dark .theme-islamic div:not([class*="text-"]),
+.theme-islamic.dark h1,
+.theme-islamic.dark h2,
+.theme-islamic.dark h3,
+.theme-islamic.dark h4,
+.theme-islamic.dark p,
+.theme-islamic.dark span:not([class*="text-"]),
+.theme-islamic.dark div:not([class*="text-"]) {
+  color: var(--foreground) !important;
+}
+
+.dark .theme-islamic [class*="text-gray-900"],
+.theme-islamic.dark [class*="text-gray-900"],
+.dark .theme-islamic [class*="text-gray-800"],
+.theme-islamic.dark [class*="text-gray-800"] {
+  color: var(--foreground) !important;
+}
+
+.dark .theme-islamic [class*="text-gray-400"],
+.theme-islamic.dark [class*="text-gray-400"],
+.dark .theme-islamic [class*="text-gray-500"],
+.theme-islamic.dark [class*="text-gray-500"] {
+  color: var(--muted-foreground) !important;
+}
+
+.dark .theme-islamic [class*="bg-white"],
+.theme-islamic.dark [class*="bg-white"],
+.dark .theme-islamic [class*="bg-gray-50"],
+.theme-islamic.dark [class*="bg-gray-50"] {
+  background-color: var(--card) !important;
+}
+
+.theme-islamic [class*="bg-background"] {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.theme-islamic .card-premium {
+  background-color: var(--card);
+  border: 2px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: all 300ms;
+}
+
+.theme-islamic .card-premium:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* === Admin Theme (Gold Borders Only) === */
+.admin-theme .bg-card,
+.admin-theme .bg-white,
+.admin-theme table,
+.admin-theme tr,
+.admin-theme th,
+.admin-theme td,
+.admin-theme .border,
+.admin-theme .border-t,
+.admin-theme .border-b,
+.admin-theme .border-l,
+.admin-theme .border-r {
+  border-color: #CBB17A !important;
+}
+
+.admin-theme .bg-card,
+.admin-theme .bg-white {
+  border-width: 1px;
+}
+
+.admin-theme button.border,
+.admin-theme a.border,
+.admin-theme input,
+.admin-theme select,
+.admin-theme textarea {
+  border-color: #CBB17A !important;
+}
+
+
+/* === Override: Remove Gold Borders in Dark Mode === */
+.dark.admin-theme .bg-card,
+.dark.admin-theme .bg-white,
+.dark.admin-theme table,
+.dark.admin-theme tr,
+.dark.admin-theme th,
+.dark.admin-theme td,
+.dark.admin-theme .border,
+.dark.admin-theme .border-t,
+.dark.admin-theme .border-b,
+.dark.admin-theme .border-l,
+.dark.admin-theme .border-r,
+.dark.admin-theme button.border,
+.dark.admin-theme a.border,
+.dark.admin-theme input,
+.dark.admin-theme select,
+.dark.admin-theme textarea {
+  border-color: hsl(var(--border)) !important;
+}
