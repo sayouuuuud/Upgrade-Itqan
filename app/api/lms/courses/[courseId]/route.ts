@@ -6,7 +6,6 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { getSession } from "@/lib/auth"
-import { checkRBAC } from "@/lib/rbac-middleware"
 import * as courseQueries from "@/lib/db-queries/course"
 
 interface Params {
