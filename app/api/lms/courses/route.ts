@@ -4,13 +4,13 @@
  */
 
 import { NextRequest, NextResponse } from "next/server"
-import { auth } from "@/lib/better-auth-config"
+import { getSession } from "@/lib/auth"
 import { checkRBAC } from "@/lib/rbac-middleware"
 import * as courseQueries from "@/lib/db-queries/course"
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await auth.api.getSession({ headers: req.headers })
+    const session = await getSession()
     
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -20,9 +20,9 @@ export async function GET(req: NextRequest) {
     const limit = Math.min(parseInt(searchParams.get("limit") || "50"), 100)
     const offset = parseInt(searchParams.get("offset") || "0")
 
-    // If teacher, only return their courses
-    if (session.user.role === "TEACHER") {
-      const courses = await courseQueries.getCoursesByTeacher(session.user.id)
+    // If reader (teacher), only return their courses
+    if (session.role === "reader") {
+      const courses = await courseQueries.getCoursesByTeacher(session.sub)
       return NextResponse.json({ success: true, data: courses })
     }
 
@@ -37,14 +37,14 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await auth.api.getSession({ headers: req.headers })
+    const session = await getSession()
     
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Check RBAC: Only TEACHER and ADMIN can create courses
-    const hasPermission = await checkRBAC(session.user.id, "create:course")
+    // Check RBAC: Only reader (teacher) and admin can create courses
+    const hasPermission = await checkRBAC(session.sub, "create:course")
     if (!hasPermission) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     }
 
     const course = await courseQueries.createCourse(
-      session.user.id,
+      session.sub,
       title,
       description || "",
       category || "General"

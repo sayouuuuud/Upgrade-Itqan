@@ -5,23 +5,19 @@
  */
 
 import { NextRequest, NextResponse } from "next/server"
-import { auth } from "@/lib/better-auth-config"
+import { getSession } from "@/lib/auth"
 import * as parentQueries from "@/lib/db-queries/parent"
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await auth.api.getSession({ headers: req.headers })
+    const session = await getSession()
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    if (session.user.role === "PARENT") {
-      // Parents can see their children
-      const children = await parentQueries.getStudentChildren(session.user.id)
-      return NextResponse.json({ success: true, data: children })
-    } else if (session.user.role === "STUDENT") {
-      // Students can see their parents
-      const parents = await parentQueries.getStudentParents(session.user.id)
+    // Students can see their parents (or parents can see children)
+    if (session.role === "student") {
+      const parents = await parentQueries.getStudentParents(session.sub)
       return NextResponse.json({ success: true, data: parents })
     }
 
@@ -34,29 +30,22 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await auth.api.getSession({ headers: req.headers })
+    const session = await getSession()
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Only ADMIN and PARENT can link students
-    if (!["ADMIN", "PARENT"].includes(session.user.role)) {
+    // Only admin can link students
+    if (session.role !== "admin") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 
     const body = await req.json()
-    const { studentId, relationship } = body
+    const { studentId, parentId, relationship } = body
 
-    if (!studentId) {
-      return NextResponse.json({ error: "Student ID required" }, { status: 400 })
+    if (!studentId || !parentId) {
+      return NextResponse.json({ error: "Student ID and Parent ID required" }, { status: 400 })
     }
-
-    // If parent, can only link to themselves
-    if (session.user.role === "PARENT" && session.user.id !== body.parentId) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-    }
-
-    const parentId = body.parentId || session.user.id
 
     const link = await parentQueries.linkParentToStudent(
       parentId,
@@ -73,7 +62,7 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    const session = await auth.api.getSession({ headers: req.headers })
+    const session = await getSession()
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
@@ -81,20 +70,16 @@ export async function DELETE(req: NextRequest) {
     const body = await req.json()
     const { studentId, parentId } = body
 
-    if (!studentId) {
-      return NextResponse.json({ error: "Student ID required" }, { status: 400 })
+    if (!studentId || !parentId) {
+      return NextResponse.json({ error: "Student ID and Parent ID required" }, { status: 400 })
     }
 
-    // Can only remove if you're the parent or admin
-    if (session.user.role === "PARENT" && session.user.id !== parentId) {
+    // Only admin can remove links
+    if (session.role !== "admin") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 
-    if (!["ADMIN", "PARENT"].includes(session.user.role)) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
-    }
-
-    const removed = await parentQueries.removeParentStudentLink(parentId || session.user.id, studentId)
+    const removed = await parentQueries.removeParentStudentLink(parentId, studentId)
     return NextResponse.json({ success: true, message: "Link removed" })
   } catch (error) {
     console.error("[API] Error removing relationship:", error)
