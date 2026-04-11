@@ -208,6 +208,45 @@ export async function getParentStudents(parentId: string): Promise<string[]> {
 }
 
 /**
+ * Simple RBAC check by userId and action string
+ * Used by API routes that need quick permission validation
+ * 
+ * Actions: "create:course", "edit:course", "delete:course",
+ *          "manage:users", "view:reports", etc.
+ */
+export async function checkRBAC(userId: string, action: string): Promise<boolean> {
+  try {
+    // Fetch user role from DB
+    const user = await queryOne<{ role: string }>(
+      'SELECT role FROM users WHERE id = $1',
+      [userId]
+    )
+
+    if (!user) return false
+
+    const role = user.role
+
+    // Permission matrix
+    const permissions: Record<string, string[]> = {
+      "create:course":   ["TEACHER", "ADMIN"],
+      "edit:course":     ["TEACHER", "ADMIN"],
+      "delete:course":   ["ADMIN"],
+      "manage:users":    ["ADMIN", "READERS_SUPERVISOR"],
+      "view:reports":    ["ADMIN", "TEACHER"],
+      "manage:invites":  ["ADMIN"],
+    }
+
+    const allowed = permissions[action]
+    if (!allowed) return false
+
+    return allowed.includes(role)
+  } catch (err) {
+    console.error('[RBAC] Error in checkRBAC:', err)
+    return false
+  }
+}
+
+/**
  * Standard Response Helpers
  */
 
